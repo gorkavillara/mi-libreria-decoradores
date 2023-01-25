@@ -17,21 +17,21 @@ export const logMethod = (target: any, propertyKey: string, descriptor: Property
 
 // 3 - Almacenar en caché la información de un valor
 
-class Cantante {
-    nombre: string
-    estrofa: string
-    constructor(n: string, e: string) {
-        this.nombre = n
-        this.estrofa = e
-    }
+// class Cantante {
+//     nombre: string
+//     estrofa: string
+//     constructor(n: string, e: string) {
+//         this.nombre = n
+//         this.estrofa = e
+//     }
 
-    @logMethod
-    canta() {
-        console.log(this.estrofa)
-        return this.estrofa
-    }
-}
+//     @logMethod
+//     canta() {
+//         console.log(this.estrofa)
+//         return this.estrofa
+//     }
+// }
 
-const miCantante = new Cantante("Kurt Cobain", "Load up on guns, bring your friends")
+// const miCantante = new Cantante("Kurt Cobain", "Load up on guns, bring your friends")
 
-miCantante.canta()
+// miCantante.canta()
