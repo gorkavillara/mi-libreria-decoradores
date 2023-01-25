@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logMethod = void 0;
+exports.cacheableMethod = exports.measureTime = exports.logMethod = void 0;
 // 1 - Loguear el método que se está llamando
 const logMethod = (target, propertyKey, descriptor) => {
     const metodoOriginal = descriptor.value;
@@ -14,7 +14,36 @@ const logMethod = (target, propertyKey, descriptor) => {
 };
 exports.logMethod = logMethod;
 // 2 - Medir el tiempo que tarda un método en ejecutarse
-// 3 - Almacenar en caché la información de un valor
+const measureTime = (target, propertyKey, descriptor) => {
+    const metodoOriginal = descriptor.value;
+    descriptor.value = function (...args) {
+        const ahora = Date.now();
+        const resultado = metodoOriginal.apply(this, args);
+        const luego = Date.now();
+        console.log(`El método ${propertyKey} ha tardado ${luego - ahora}ms`);
+        return resultado;
+    };
+};
+exports.measureTime = measureTime;
+const cacheableMethod = (cache) => {
+    return function (target, propertyKey, descriptor) {
+        const metodoOriginal = descriptor.value;
+        descriptor.value = function (...args) {
+            const key = JSON.stringify({ target, propertyKey, args });
+            if (cache[key]) {
+                console.log(`Estoy retornando el resultado cacheado para el método ${propertyKey}`);
+                return cache[key];
+            }
+            console.log(`Estoy retornando el resultado nuevo para el método ${propertyKey}`);
+            const resultado = metodoOriginal.apply(this, args);
+            cache[key] = resultado;
+            console.log("key", key);
+            return resultado;
+        };
+    };
+};
+exports.cacheableMethod = cacheableMethod;
+// const cache: CacheObject = {}
 // class Cantante {
 //     nombre: string
 //     estrofa: string
@@ -22,11 +51,16 @@ exports.logMethod = logMethod;
 //         this.nombre = n
 //         this.estrofa = e
 //     }
-//     @logMethod
+//     @measureTime
+//     @cacheableMethod(cache)
 //     canta() {
 //         console.log(this.estrofa)
+//         for (let i = 0; i < 1000000000; i++) { let a = 0 }
 //         return this.estrofa
 //     }
 // }
 // const miCantante = new Cantante("Kurt Cobain", "Load up on guns, bring your friends")
+// miCantante.canta()
+// miCantante.canta()
+// miCantante.canta()
 // miCantante.canta()
