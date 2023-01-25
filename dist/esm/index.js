@@ -32,29 +32,7 @@ export const cacheableMethod = (cache) => {
             console.log(`Estoy retornando el resultado nuevo para el método ${propertyKey}`);
             const resultado = metodoOriginal.apply(this, args);
             cache[key] = resultado;
-            console.log("key", key);
             return resultado;
         };
     };
 };
-// const cache: CacheObject = {}
-// class Cantante {
-//     nombre: string
-//     estrofa: string
-//     constructor(n: string, e: string) {
-//         this.nombre = n
-//         this.estrofa = e
-//     }
-//     @measureTime
-//     @cacheableMethod(cache)
-//     canta() {
-//         console.log(this.estrofa)
-//         for (let i = 0; i < 1000000000; i++) { let a = 0 }
-//         return this.estrofa
-//     }
-// }
-// const miCantante = new Cantante("Kurt Cobain", "Load up on guns, bring your friends")
-// miCantante.canta()
-// miCantante.canta()
-// miCantante.canta()
-// miCantante.canta()
